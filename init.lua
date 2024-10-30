@@ -224,14 +224,39 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'sainnhe/everforest',
   'farmergreg/vim-lastplace',
-  -- 'vimwiki/vimwiki',
-  -- 'blindFS/vim-taskwarrior',
-  -- { 'tools-life/taskwiki', init = function() vim.g.taskwiki_disable_concealcursor = 1 end },
   {
     'L3MON4D3/LuaSnip',
     version = 'v2.*',
     build = 'make install_jsregexp',
+    config = function()
+      local ls = require 'luasnip'
+      local types = require 'luasnip.util.types'
+      ls.config.set_config {
+        history = true,
+        updateevents = 'TextChanged,TextChangedI',
+        enable_autosnippets = true,
+      }
+      vim.keymap.set({ 'i', 's' }, '<tab>', function()
+        if ls.expand_or_jumpable() then ls.expand_or_jump() end
+      end, { silent = true })
+      vim.keymap.set({ 'i', 's' }, '<s-tab>', function()
+        if ls.jumpable(-1) then ls.jump(-1) end
+      end, { silent = true })
+      vim.keymap.set({ 'i', 's' }, '<F48>', function()
+        if ls.choice_active() then ls.change_choice(1) end
+      end, { silent = true })
+      vim.keymap.set('n', '<leader>rs', '<cmd>tabnew ~/.config/nvim/lua/custom/plugins/snippets/init.lua<cr>')
+      vim.keymap.set('n', '<leader>rr', "lua require 'custom.plugins.snippets.lua'")
+      require 'custom.plugins.snippets'
+    end,
+  },
+  {
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function() vim.fn['mkdp#util#install']() end,
   },
   {
     'ahmedkhalf/project.nvim',
@@ -336,7 +361,6 @@ require('lazy').setup({
 
     opts = {
       suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-      -- log_level = 'debug',
     },
   },
   {
@@ -350,6 +374,26 @@ require('lazy').setup({
       require('oil').setup()
       vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
     end,
+  },
+  {
+    'cuducos/yaml.nvim',
+    ft = { 'yaml' }, -- optional
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-telescope/telescope.nvim', -- optional
+    },
+    config = function()
+      require('lualine').setup {
+        sections = {
+          lualine_x = { require('yaml_nvim').get_yaml_key },
+          vim.keymap.set('n', 'sy', '<CMD>YAMLTelescope<CR>', { desc = 'Search YAML' }),
+        },
+      }
+    end,
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -754,7 +798,7 @@ require('lazy').setup({
         -- clangd = {},
         gopls = {},
         -- pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -870,12 +914,10 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function() require('luasnip.loaders.from_vscode').lazy_load() end,
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -915,7 +957,7 @@ require('lazy').setup({
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
-          ['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<C-y>'] = cmp.mapping.confirm { select = true },
 
           -- If you prefer more traditional completion keymaps,
           -- you can uncomment the following lines
@@ -971,7 +1013,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'everforest'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
