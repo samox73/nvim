@@ -114,7 +114,9 @@ vim.opt.showmode = false
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function() vim.opt.clipboard = 'unnamedplus' end)
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
 
 -- Enable break indent
 vim.opt.breakindent = true
@@ -197,7 +199,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-  callback = function() vim.highlight.on_yank() end,
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
@@ -206,7 +210,9 @@ local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
-  if vim.v.shell_error ~= 0 then error('Error cloning lazy.nvim:\n' .. out) end
+  if vim.v.shell_error ~= 0 then
+    error('Error cloning lazy.nvim:\n' .. out)
+  end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
@@ -224,177 +230,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  'sainnhe/everforest',
-  'farmergreg/vim-lastplace',
-  {
-    'L3MON4D3/LuaSnip',
-    version = 'v2.*',
-    build = 'make install_jsregexp',
-    config = function()
-      local ls = require 'luasnip'
-      local types = require 'luasnip.util.types'
-      ls.config.set_config {
-        history = true,
-        updateevents = 'TextChanged,TextChangedI',
-        enable_autosnippets = true,
-      }
-      vim.keymap.set({ 'i', 's' }, '<tab>', function()
-        if ls.expand_or_jumpable() then ls.expand_or_jump() end
-      end, { silent = true })
-      vim.keymap.set({ 'i', 's' }, '<s-tab>', function()
-        if ls.jumpable(-1) then ls.jump(-1) end
-      end, { silent = true })
-      vim.keymap.set({ 'i', 's' }, '<F48>', function()
-        if ls.choice_active() then ls.change_choice(1) end
-      end, { silent = true })
-      vim.keymap.set('n', '<leader>rs', '<cmd>tabnew ~/.config/nvim/lua/custom/plugins/snippets/init.lua<cr>')
-      vim.keymap.set('n', '<leader>rr', "lua require 'custom.plugins.snippets.lua'")
-      require 'custom.plugins.snippets'
-    end,
-  },
-  {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    ft = { 'markdown' },
-    build = function() vim.fn['mkdp#util#install']() end,
-  },
-  {
-    'ahmedkhalf/project.nvim',
-    config = function()
-      require('project_nvim').setup {}
-      require('telescope').load_extension 'projects'
-    end,
-  },
-  {
-    'nvimdev/dashboard-nvim',
-    event = 'VimEnter',
-    config = function()
-      require('dashboard').setup {
-        theme = 'hyper',
-        config = {
-          project = {
-            enable = true,
-            limit = 8,
-          },
-          week_header = {
-            enable = true,
-          },
-          shortcut = {
-            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
-            {
-              icon = ' ',
-              icon_hl = '@variable',
-              desc = 'Files',
-              group = 'Label',
-              action = 'Telescope find_files',
-              key = 'f',
-            },
-            {
-              desc = ' Apps',
-              group = 'DiagnosticHint',
-              action = 'Telescope app',
-              key = 'a',
-            },
-            {
-              desc = ' dotfiles',
-              group = 'Number',
-              action = 'Telescope dotfiles',
-              key = 'd',
-            },
-          },
-        },
-      }
-    end,
-    requires = { 'nvim-tree/nvim-web-devicons' },
-  },
-  {
-    'folke/noice.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('noice').setup {
-        lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-            ['vim.lsp.util.stylize_markdown'] = true,
-            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
-          },
-        },
-        -- you can enable a preset for easier configuration
-        presets = {
-          bottom_search = true, -- use a classic bottom cmdline for search
-          command_palette = true, -- position the cmdline and popupmenu together
-          long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false, -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false, -- add a border to hover docs and signature help
-        },
-      }
-    end,
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      'MunifTanjim/nui.nvim',
-      -- OPTIONAL:
-      -- `nvim-notify` is only needed, if you want to use the notification view.
-      -- If not available, we use `mini` as the fallback
-      -- 'rcarriga/nvim-notify',
-    },
-  },
-  {
-    'rcarriga/nvim-dap-ui',
-    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
-    config = function()
-      require('dapui').setup()
-      vim.keymap.set('n', '<leader>d', function() require('dapui').toggle() end, { desc = '[S]earch [H]elp' })
-      local dap, dapui = require 'dap', require 'dapui'
-      dap.listeners.before.attach.dapui_config = function() dapui.open() end
-      dap.listeners.before.launch.dapui_config = function() dapui.open() end
-      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
-      dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
-    end,
-  },
-  {
-    'rmagatti/auto-session',
-    lazy = false,
-    dependencies = {
-      'nvim-telescope/telescope.nvim', -- Only needed if you want to use session lens
-    },
-
-    opts = {
-      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-    },
-  },
-  {
-    'stevearc/oil.nvim',
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {},
-    -- Optional dependencies
-    dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    config = function()
-      require('oil').setup()
-      vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
-    end,
-  },
-  {
-    'cuducos/yaml.nvim',
-    ft = { 'yaml' }, -- optional
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      'nvim-telescope/telescope.nvim', -- optional
-    },
-    config = function()
-      require('lualine').setup {
-        sections = {
-          lualine_x = { require('yaml_nvim').get_yaml_key },
-          vim.keymap.set('n', 'sy', '<CMD>YAMLTelescope<CR>', { desc = 'Search YAML' }),
-        },
-      }
-    end,
-  },
-  {
-    'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -513,7 +348,9 @@ require('lazy').setup({
 
         -- `cond` is a condition used to determine whether this plugin should be
         -- installed and loaded.
-        cond = function() return vim.fn.executable 'make' == 1 end,
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
@@ -587,51 +424,19 @@ require('lazy').setup({
 
       -- It's also possible to pass additional configuration options.
       --  See `:help telescope.builtin.live_grep()` for information about particular keys
-      vim.keymap.set(
-        'n',
-        '<leader>s/',
-        function()
-          builtin.live_grep {
-            grep_open_files = true,
-            prompt_title = 'Live Grep in Open Files',
-          }
-        end,
-        { desc = '[S]earch [/] in Open Files' }
-      )
+      vim.keymap.set('n', '<leader>s/', function()
+        builtin.live_grep {
+          grep_open_files = true,
+          prompt_title = 'Live Grep in Open Files',
+        }
+      end, { desc = '[S]earch [/] in Open Files' })
 
       -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function() builtin.find_files { cwd = vim.fn.stdpath 'config' } end, { desc = '[S]earch [N]eovim files' })
+      vim.keymap.set('n', '<leader>sn', function()
+        builtin.find_files { cwd = vim.fn.stdpath 'config' }
+      end, { desc = '[S]earch [N]eovim files' })
     end,
   },
-
-  {
-    'pmizio/typescript-tools.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-    opts = {},
-  },
-
-  'sbdchd/neoformat',
-  {
-    'mfussenegger/nvim-dap',
-    config = function() end,
-  },
-  {
-    'leoluz/nvim-dap-go',
-    config = function() require('dap-go').setup() end,
-  },
-  {
-    'theHamsta/nvim-dap-virtual-text',
-    config = function() require('nvim-dap-virtual-text').setup() end,
-  },
-  {
-    'Weissle/persistent-breakpoints.nvim',
-    config = function()
-      require('persistent-breakpoints').setup {
-        load_breakpoints_event = { 'BufReadPost' },
-      }
-    end,
-  },
-  'tpope/vim-fugitive',
 
   -- LSP Plugins
   {
@@ -778,7 +583,9 @@ require('lazy').setup({
           --
           -- This may be unwanted, since they displace some of your code
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-            map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
+            map('<leader>th', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end, '[T]oggle Inlay [H]ints')
           end
         end,
       })
@@ -867,7 +674,9 @@ require('lazy').setup({
     keys = {
       {
         '<leader>f',
-        function() require('conform').format { async = true, lsp_format = 'fallback' } end,
+        function()
+          require('conform').format { async = true, lsp_format = 'fallback' }
+        end,
         mode = '',
         desc = '[F]ormat buffer',
       },
@@ -912,7 +721,9 @@ require('lazy').setup({
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then return end
+          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+            return
+          end
           return 'make install_jsregexp'
         end)(),
         dependencies = {
@@ -921,7 +732,9 @@ require('lazy').setup({
           --    https://github.com/rafamadriz/friendly-snippets
           {
             'rafamadriz/friendly-snippets',
-            config = function() require('luasnip.loaders.from_vscode').lazy_load() end,
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
           },
         },
       },
@@ -941,7 +754,9 @@ require('lazy').setup({
 
       cmp.setup {
         snippet = {
-          expand = function(args) luasnip.lsp_expand(args.body) end,
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
@@ -984,10 +799,14 @@ require('lazy').setup({
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
           ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then luasnip.expand_or_jump() end
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
           end, { 'i', 's' }),
           ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            end
           end, { 'i', 's' }),
 
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
@@ -1057,7 +876,9 @@ require('lazy').setup({
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function() return '%2l:%-2v' end
+      statusline.section_location = function()
+        return '%2l:%-2v'
+      end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
@@ -1110,7 +931,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -1135,4 +956,4 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-require 'custom.plugins.init'
+require 'custom'
