@@ -255,7 +255,6 @@ require('lazy').setup({
       },
     },
   },
-  'iamcco/markdown-preview.nvim',
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
