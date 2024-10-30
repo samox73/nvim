@@ -420,6 +420,7 @@ require('lazy').setup({
       },
     },
   },
+  'iamcco/markdown-preview.nvim',
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -610,7 +611,10 @@ require('lazy').setup({
   },
 
   'sbdchd/neoformat',
-  'mfussenegger/nvim-dap',
+  {
+    'mfussenegger/nvim-dap',
+    config = function() end,
+  },
   {
     'leoluz/nvim-dap-go',
     config = function() require('dap-go').setup() end,
@@ -627,6 +631,7 @@ require('lazy').setup({
       }
     end,
   },
+  'tpope/vim-fugitive',
 
   -- LSP Plugins
   {
