@@ -3,6 +3,7 @@ return {
   'sbdchd/neoformat',
   'tpope/vim-fugitive',
   'farmergreg/vim-lastplace',
+  { 'artempyanykh/marksman' },
   'nvim-treesitter/nvim-treesitter-context',
   {
     'nvim-lualine/lualine.nvim',
