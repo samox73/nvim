@@ -29,7 +29,12 @@ return {
   },
   {
     'leoluz/nvim-dap-go',
-    config = function() require('dap-go').setup() end,
+    config = function()
+      local dapgo = require 'dap-go'
+      vim.keymap.set('n', '<F7>', function() dapgo.debug_test() end)
+      vim.keymap.set('n', '<F8>', function() dapgo.debug_last_test() end)
+      dapgo.setup()
+    end,
   },
   {
     'theHamsta/nvim-dap-virtual-text',

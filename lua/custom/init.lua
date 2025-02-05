@@ -1,6 +1,7 @@
 vim.keymap.set('n', '<Leader>n', '<cmd>tabnext<cr>')
 vim.keymap.set('n', '<Leader>m', '<cmd>tabprevious<cr>')
 vim.keymap.set('n', '<Leader>t', '<cmd>tabnew %:h<cr>')
+vim.keymap.set('n', 'gt', '<cmd>tab split | lua vim.lsp.buf.definition()<cr>', {})
 
 vim.keymap.set('n', '<F2>', function() vim.lsp.buf.rename() end)
 vim.keymap.set('n', '<C-/>', 'gcc', { remap = true })
