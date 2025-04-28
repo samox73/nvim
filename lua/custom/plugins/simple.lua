@@ -1,9 +1,9 @@
 return {
-  'sainnhe/everforest',
+  -- 'sainnhe/everforest',
   'sbdchd/neoformat',
   'tpope/vim-fugitive',
   'farmergreg/vim-lastplace',
-  { 'artempyanykh/marksman' },
+  'artempyanykh/marksman',
   'nvim-treesitter/nvim-treesitter-context',
   {
     'nvim-lualine/lualine.nvim',
