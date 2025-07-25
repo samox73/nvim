@@ -389,7 +389,7 @@ require('lazy').setup({
         -- },
         -- pickers = {}
         defaults = {
-          file_ignore_patterns = { '.*_test.go' },
+          -- file_ignore_patterns = { '.*_test.go' },
         },
         extensions = {
           ['ui-select'] = {
@@ -701,7 +701,8 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        go = { 'gofmt' },
+        go = { 'gofumpt' },
+        yaml = { 'prettier' },
         typescript = { 'prettier' },
         -- nu = { 'nufmt' },
       },
