@@ -883,7 +883,7 @@ require('lazy').setup({
           if pcall(vim.treesitter.start, event.buf) then
             if vim.bo[event.buf].filetype == 'ruby' then
               vim.bo[event.buf].syntax = 'ON'
-            else
+            elseif vim.bo[event.buf].filetype ~= 'rust' then
               vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
             end
           end
@@ -904,7 +904,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
