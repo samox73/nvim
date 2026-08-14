@@ -118,6 +118,10 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+vim.api.nvim_create_user_command('GetFileName', function()
+  vim.fn.setreg('+', vim.fn.expand '%:p')
+end, { desc = 'Copy current file path to clipboard' })
+
 -- Enable break indent
 vim.opt.breakindent = true
 
