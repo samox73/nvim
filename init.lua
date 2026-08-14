@@ -749,6 +749,13 @@ require('lazy').setup({
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
+      local compare = cmp.config.compare
+      local completion_kind = cmp.lsp.CompletionItemKind
+      local completion_kind_priority = {
+        [completion_kind.Field] = 1,
+        [completion_kind.Method] = 2,
+        [completion_kind.Snippet] = 3,
+      }
       luasnip.config.setup {}
 
       cmp.setup {
@@ -759,6 +766,26 @@ require('lazy').setup({
         },
         completion = { completeopt = 'menu,noinsert,noselect' },
         preselect = cmp.PreselectMode.None,
+        sorting = {
+          comparators = {
+            compare.offset,
+            compare.exact,
+            compare.score,
+            compare.recently_used,
+            compare.locality,
+            function(entry1, entry2)
+              local priority1 = completion_kind_priority[entry1:get_kind()]
+              local priority2 = completion_kind_priority[entry2:get_kind()]
+              if priority1 and priority2 and priority1 ~= priority2 then
+                return priority1 < priority2
+              end
+            end,
+            compare.kind,
+            compare.sort_text,
+            compare.length,
+            compare.order,
+          },
+        },
 
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
