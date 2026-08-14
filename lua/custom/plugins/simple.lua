@@ -1,5 +1,4 @@
 return {
-  -- 'sainnhe/everforest',
   'sbdchd/neoformat',
   'tpope/vim-fugitive',
   'farmergreg/vim-lastplace',
