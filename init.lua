@@ -768,11 +768,6 @@ require('lazy').setup({
         preselect = cmp.PreselectMode.None,
         sorting = {
           comparators = {
-            compare.offset,
-            compare.exact,
-            compare.score,
-            compare.recently_used,
-            compare.locality,
             function(entry1, entry2)
               local priority1 = completion_kind_priority[entry1:get_kind()]
               local priority2 = completion_kind_priority[entry2:get_kind()]
@@ -780,6 +775,11 @@ require('lazy').setup({
                 return priority1 < priority2
               end
             end,
+            compare.offset,
+            compare.exact,
+            compare.score,
+            compare.recently_used,
+            compare.locality,
             compare.kind,
             compare.sort_text,
             compare.length,
