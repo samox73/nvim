@@ -1,3 +1,4 @@
+-- Provides TypeScript language tooling backed by tsserver.
 return {
   {
     'pmizio/typescript-tools.nvim',

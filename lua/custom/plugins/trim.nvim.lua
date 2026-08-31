@@ -1,3 +1,4 @@
+-- Removes trailing whitespace and repeated blank lines when files are written.
 return {
   {
     'cappyzawa/trim.nvim',

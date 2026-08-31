@@ -1,3 +1,4 @@
+-- Presents diagnostics, symbols, LSP results, and lists in navigable panels.
 return {
   {
     'folke/trouble.nvim',

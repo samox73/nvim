@@ -1,3 +1,4 @@
+-- Displays CSV files as readable, aligned tables.
 return {
   {
     'hat0uma/csvview.nvim',

@@ -1,3 +1,4 @@
+-- Formats Markdown tables automatically while they are edited.
 return {
   {
     'Kicamon/markdown-table-mode.nvim',

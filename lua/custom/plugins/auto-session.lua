@@ -1,3 +1,4 @@
+-- Automatically saves and restores Neovim sessions between visits to a project.
 return {
   {
     'rmagatti/auto-session',

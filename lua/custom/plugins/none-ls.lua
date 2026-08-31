@@ -1,3 +1,4 @@
+-- Exposes external linters and formatters through Neovim's LSP interface.
 return {
   {
     'nvimtools/none-ls.nvim',

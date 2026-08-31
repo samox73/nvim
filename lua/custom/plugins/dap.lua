@@ -1,3 +1,4 @@
+-- Adds debugging, a visual debugger UI, Go support, inline values, and persistent breakpoints.
 return {
   {
     'rcarriga/nvim-dap-ui',

@@ -1,3 +1,4 @@
+-- Shows and searches YAML key paths through the statusline and Telescope.
 return {
   {
     'cuducos/yaml.nvim',

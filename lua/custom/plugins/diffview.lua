@@ -1,3 +1,4 @@
+-- Provides rich Git diff, file history, and merge-conflict views.
 return {
   {
     'sindrets/diffview.nvim',

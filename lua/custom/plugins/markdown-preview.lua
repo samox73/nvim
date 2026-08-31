@@ -1,3 +1,4 @@
+-- Previews Markdown files live in a web browser.
 return {
   {
     'iamcco/markdown-preview.nvim',

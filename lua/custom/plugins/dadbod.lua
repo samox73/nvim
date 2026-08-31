@@ -1,3 +1,4 @@
+-- Provides a database UI with SQL querying and completion.
 return {
   {
     'kristijanhusak/vim-dadbod-ui',

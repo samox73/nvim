@@ -1,3 +1,4 @@
+-- Collects small plugins for formatting, Git, editing context, navigation, and the statusline.
 return {
   'sbdchd/neoformat',
   'tpope/vim-fugitive',

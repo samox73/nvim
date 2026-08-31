@@ -1,3 +1,4 @@
+-- Replaces Neovim's command-line, message, and LSP notification interfaces.
 return {
   {
     'folke/noice.nvim',

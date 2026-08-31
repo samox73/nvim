@@ -1,3 +1,4 @@
+-- Lets directories and files be managed through editable Neovim buffers.
 return {
   {
     'stevearc/oil.nvim',

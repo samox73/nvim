@@ -261,6 +261,54 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      word_diff = true,
+      on_attach = function(bufnr)
+        local gitsigns = require 'gitsigns'
+        local function map(mode, lhs, rhs, desc)
+          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
+        end
+
+        map('n', ']c', function()
+          if vim.wo.diff then
+            vim.cmd.normal { ']c', bang = true }
+          else
+            gitsigns.nav_hunk 'next'
+          end
+        end, 'Next git change')
+        map('n', '[c', function()
+          if vim.wo.diff then
+            vim.cmd.normal { '[c', bang = true }
+          else
+            gitsigns.nav_hunk 'prev'
+          end
+        end, 'Previous git change')
+
+        map('n', '<leader>gs', gitsigns.stage_hunk, 'Git hunk [S]tage')
+        map('n', '<leader>gr', gitsigns.reset_hunk, 'Git hunk [R]eset')
+        map('v', '<leader>gs', function()
+          gitsigns.stage_hunk { vim.fn.line '.', vim.fn.line 'v' }
+        end, 'Git hunk [S]tage')
+        map('v', '<leader>gr', function()
+          gitsigns.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
+        end, 'Git hunk [R]eset')
+        map('n', '<leader>gS', gitsigns.stage_buffer, 'Git buffer [S]tage')
+        map('n', '<leader>gR', gitsigns.reset_buffer, 'Git buffer [R]eset')
+        map('n', '<leader>gu', gitsigns.undo_stage_hunk, 'Git hunk stage [U]ndo')
+        map('n', '<leader>gp', gitsigns.preview_hunk, 'Git hunk [P]review')
+        map('n', '<leader>gi', gitsigns.preview_hunk_inline, 'Git hunk preview [I]nline')
+        map('n', '<leader>gd', gitsigns.diffthis, 'Git buffer [D]iff against index')
+        map('n', '<leader>gD', function()
+          gitsigns.diffthis '~'
+        end, 'Git buffer [D]iff against last commit')
+        map('n', '<leader>gb', function()
+          gitsigns.blame_line { full = true }
+        end, 'Git line [B]lame')
+
+        map('n', '<leader>gB', gitsigns.toggle_current_line_blame, 'Git toggle line [B]lame')
+        map('n', '<leader>gx', gitsigns.toggle_deleted, 'Git toggle deleted lines')
+        map('n', '<leader>gw', gitsigns.toggle_word_diff, 'Git toggle [W]ord diff')
+        map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, 'Git hunk text object')
+      end,
     },
   },
 
@@ -328,7 +376,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>g', group = '[G]it', mode = { 'n', 'v' } },
       },
     },
   },
@@ -911,7 +959,23 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
-      require('nvim-treesitter').install { 'bash', 'c', 'diff', 'html', 'latex', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'rust', 'vim', 'vimdoc', 'nu', 'java' }
+      require('nvim-treesitter').install {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'latex',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'rust',
+        'vim',
+        'vimdoc',
+        'nu',
+        'java',
+      }
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(event)
           if pcall(vim.treesitter.start, event.buf) then

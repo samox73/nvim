@@ -1,3 +1,4 @@
+-- Adds LaTeX editing, compilation, and PDF viewing through VimTeX.
 return {
   {
     "lervag/vimtex",
