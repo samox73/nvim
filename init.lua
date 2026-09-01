@@ -124,6 +124,8 @@ end, { desc = 'Copy current file path to clipboard' })
 
 -- Enable break indent
 vim.opt.breakindent = true
+vim.opt.wrap = true
+vim.opt.linebreak = true
 
 -- Save undo history
 vim.opt.undofile = true
@@ -702,6 +704,8 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'markdownlint',
+        'prettier',
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -751,9 +755,13 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         go = { 'gofumpt' },
+        markdown = { 'prettier' },
         yaml = { 'prettier' },
         typescript = { 'prettier' },
         -- nu = { 'nufmt' },
+      },
+      formatters = {
+        prettier = { prepend_args = { '--prose-wrap', 'never' } },
       },
     },
   },
