@@ -122,6 +122,16 @@ vim.api.nvim_create_user_command('GetFileName', function()
   vim.fn.setreg('+', vim.fn.expand '%:p')
 end, { desc = 'Copy current file path to clipboard' })
 
+vim.api.nvim_create_user_command('SetWidth', function(opts)
+  local width = assert(tonumber(opts.args), 'SetWidth expects a number')
+  if vim.fn.winnr '$' == 1 then
+    vim.cmd.vnew()
+    vim.cmd.wincmd 'p'
+  end
+  vim.api.nvim_win_set_width(0, width)
+  vim.wo.winfixwidth = true
+end, { nargs = 1, desc = 'Set the current window width' })
+
 -- Enable break indent
 vim.opt.breakindent = true
 vim.opt.wrap = true
