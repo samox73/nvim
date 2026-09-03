@@ -273,7 +273,6 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
-      word_diff = true,
       on_attach = function(bufnr)
         local gitsigns = require 'gitsigns'
         local function map(mode, lhs, rhs, desc)
@@ -987,6 +986,7 @@ require('lazy').setup({
         'luadoc',
         'markdown',
         'markdown_inline',
+        'python',
         'query',
         'rust',
         'vim',
@@ -999,7 +999,7 @@ require('lazy').setup({
           if pcall(vim.treesitter.start, event.buf) then
             if vim.bo[event.buf].filetype == 'ruby' then
               vim.bo[event.buf].syntax = 'ON'
-            elseif vim.bo[event.buf].filetype ~= 'rust' then
+            elseif vim.bo[event.buf].filetype ~= 'python' and vim.bo[event.buf].filetype ~= 'rust' then
               vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
             end
           end
