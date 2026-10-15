@@ -8,7 +8,7 @@ return {
       -- VimTeX configuration goes here, e.g.
       vim.g.vimtex_syntax_enabled = 0
       vim.g.vimtex_view_method = "sioyek"
-      vim.g.vimtex_quickfix_open_on_warning = 0
+      vim.g.vimtex_quickfix_mode = 0 -- never auto-open the quickfix window; use <leader>le
 
       -- One sioyek instance (= one window) per PDF. sioyek 2.0's `--new-window` is supposed to reuse
       -- a window already showing the file but always opens a new one, so key an instance on the PDF path.
