@@ -2,13 +2,27 @@
 return {
   {
     'folke/trouble.nvim',
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    opts = {
+      modes = {
+        errors = { mode = 'diagnostics', filter = { severity = vim.diagnostic.severity.ERROR } },
+      },
+    },
     cmd = 'Trouble',
     keys = {
       {
         '<leader>xx',
-        '<cmd>Trouble diagnostics toggle<cr>',
-        desc = 'Diagnostics (Trouble)',
+        '<cmd>Trouble errors toggle<cr>',
+        desc = 'Errors (Trouble)',
+      },
+      {
+        ']e',
+        function() require('trouble').next { mode = 'errors', jump = true } end,
+        desc = 'Next error (Trouble)',
+      },
+      {
+        '[e',
+        function() require('trouble').prev { mode = 'errors', jump = true } end,
+        desc = 'Previous error (Trouble)',
       },
       {
         '<leader>xX',
