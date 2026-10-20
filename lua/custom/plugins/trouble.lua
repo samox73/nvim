@@ -11,6 +11,11 @@ return {
     keys = {
       {
         '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xe',
         '<cmd>Trouble errors toggle<cr>',
         desc = 'Errors (Trouble)',
       },
