@@ -712,7 +712,11 @@ require('lazy').setup({
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
+      -- rust-analyzer comes from the nix toolchain, not mason: a mason copy
+      -- drifts from the std source it has to parse and types go {unknown}.
+      local ensure_installed = vim.tbl_filter(function(name)
+        return name ~= 'rust_analyzer'
+      end, vim.tbl_keys(servers or {}))
       vim.list_extend(ensure_installed, {
         'markdownlint',
         'prettier',
@@ -727,6 +731,7 @@ require('lazy').setup({
       end
       require('mason-lspconfig').setup { automatic_enable = vim.tbl_keys(servers) }
       vim.lsp.enable 'nushell'
+      vim.lsp.enable 'rust_analyzer'
     end,
   },
 
